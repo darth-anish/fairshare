@@ -1,0 +1,222 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7f6;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+h1 {
+    text-align: center;
+    color: #333;
+}
+.input-group {
+    margin-bottom: 20px;
+}
+label {
+    display: block;
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 5px;
+}
+input[type="text"], input[type="date"], input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #45a049;
+}
+.people-list {
+    margin-top: 20px;
+    border-top: 2px solid #ddd;
+    padding-top: 20px;
+}
+.person {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.person input {
+    width: 45%;
+}
+.error {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+}
+.person {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    align-items: center;
+}
+.delete-btn {
+    background-color: #ff4444;
+    margin-left: 10px;
+}
+#results {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    display: none;
+}
+#results {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    display: none;
+}
+#results table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+#results th, #results td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+#results th {
+    background-color: #4CAF50;
+    color: white;
+}
+.people-list {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px solid #ddd;
+}
+
+.person {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;  /* Increased margin for better spacing */
+    align-items: center;  /* Vertically centers items */
+}
+
+.person input {
+    width: 30%;  /* Adjusted width for inputs */
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;  /* Spacing between inputs */
+}
+
+.delete-btn {
+    background-color: #ff4444;
+    padding: 8px 15px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background-color: #cc3333;  /* Darker red on hover */
+}
+
+input[type="text"] {
+    width: 40%;  /* Text input wider for better readability */
+}
+
+input[type="date"] {
+    width: 25%;  /* Date inputs slightly narrower */
+}
+
+#add-person-btn {
+    margin-top: 20px;  /* Added spacing above button */
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+.input-group {
+    margin-bottom: 20px;
+}
+
+input[type="number"], input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+footer {
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+    margin-top: 40px;
+    padding: 10px 0;
+    background-color: #f4f7f6;
+}
+
+footer p {
+    margin: 0;
+}
+
+#calculate-btn {
+    margin-top: 20px; /* Adds space between the buttons */
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .person {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .person input {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .delete-btn {
+        width: 100%;
+        margin-top: 10px;
+    }
+    button {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .input-group {
+        margin-bottom: 15px;  /* Less margin for smaller screens */
+    }
+
+    input[type="number"], input[type="date"] {
+        width: 100%;  /* Ensure full width for inputs */
+        padding: 12px;  /* Increased padding for better touch interaction */
+        font-size: 16px;  /* Slightly larger font size for readability */
+    }
+}

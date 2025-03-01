@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fair Share Calculator</title>
+    <!-- Link to the external CSS file -->
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <div class="container">
+        <h1>FairShare</h1>
+        <div class="input-group">
+            <label for="total-amount">Total Share to Divide:</label>
+            <input type="number" id="total-amount" placeholder="Enter total amount">
+        </div>
+        <div class="input-group">
+            <label for="global-start-date">Global Start Date:</label>
+            <input type="date" id="global-start-date">
+        </div>
+        <div class="input-group">
+            <label for="global-end-date">Global End Date:</label>
+            <input type="date" id="global-end-date">
+        </div>
+        <div class="people-list">
+            <label for="people">Contributors (Name, Start Date, End Date):</label>
+            <div class="person" id="person-template" style="display: none;">
+                <input type="text" placeholder="Name">
+                <input type="date">
+                <input type="date">
+                <button class="delete-btn">Delete</button>
+            </div>
+            <div id="people-container"></div>
+        </div>
+        
+        <button id="add-person-btn">Add Contributor</button>
+        <button id="calculate-btn">Calculate</button>
+        <div class="error" id="error-message"></div>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const addPersonButton = document.getElementById('add-person-btn');
+        const calculateButton = document.getElementById('calculate-btn');
+        const peopleContainer = document.getElementById('people-container');
+        const personTemplate = document.getElementById('person-template');
+        const errorMessage = document.getElementById('error-message');
+        let personCount = 0;
+
+        addPersonButton.addEventListener('click', () => {
+            if (personCount < 5) {
+                const newPerson = personTemplate.cloneNode(true);
+                newPerson.style.display = 'flex';
+                peopleContainer.appendChild(newPerson);
+                personCount++;
+
+                // Add delete button functionality for new person
+                const deleteBtn = newPerson.querySelector('.delete-btn');
+                deleteBtn.addEventListener('click', deletePerson);
+            } else {
+                alert("You can add up to 5 people only.");
+            }
+        });
+
+        // Delete person function
+        function deletePerson(e) {
+            e.preventDefault();
+            const personRow = e.target.parentElement;
+            personRow.remove();
+            personCount--;
+        }
+
+          // Function to display results on page
+          function displayResults(resultHtml) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = resultHtml;
+            resultsDiv.style.display = 'block';
+        }
+
+        // Calculation function
+        function calculateDays(startDate, endDate, globalStartDate, globalEndDate) {
+            const personStart = Math.max(startDate.getTime(), globalStartDate.getTime());
+            const personEnd = Math.min(endDate.getTime(), globalEndDate.getTime());
+            
+            if (personStart >= personEnd) return 0;
+            
+            const millisecondsPerDay = 1000 * 60 * 60 * 24;
+            const days = Math.ceil((personEnd - personStart) / millisecondsPerDay) + 1;
+            
+            return days;
+        }
+
+        calculateButton.addEventListener('click', () => {
+            const totalAmount = parseFloat(document.getElementById('total-amount').value);
+            const globalStartDate = new Date(document.getElementById('global-start-date').value);
+            const globalEndDate = new Date(document.getElementById('global-end-date').value);
+            const peopleData = Array.from(peopleContainer.children).map(person => {
+                const name = person.querySelector('input[type="text"]').value;
+                const startDate = new Date(person.querySelector('input[type="date"]:nth-child(2)').value);
+                const endDate = new Date(person.querySelector('input[type="date"]:nth-child(3)').value);
+                return { name, startDate, endDate };
+            });
+
+            let error = '';
+            if (isNaN(totalAmount) || !globalStartDate || !globalEndDate) {
+                error = 'Please fill in all the required fields.';
+            } else if (globalEndDate <= globalStartDate) {
+                error = 'Global end date cannot be before the global start date.';
+            } else {
+                for (const person of peopleData) {
+ 
+                    if (!person.name || isNaN(person.startDate.getTime()) || isNaN(person.endDate.getTime())) {
+                        error = 'Please fill in all person details.';
+                        break;
+                    }
+                    if (person.startDate >= person.endDate) {
+                        error = 'End date must be after the start date.';
+                        break;
+                    }
+                    if (person.startDate <= globalStartDate || person.endDate >= globalEndDate) {
+                        error = 'Each person’s dates must fall within the global date range.';
+                        break;
+                    }
+                }
+            }
+
+            if (error) {
+                errorMessage.textContent = error;
+            } else {
+                errorMessage.textContent = '';
+                
+                // Calculate total overlapping days
+                let totalDays = 0;
+                for (const person of peopleData) {
+                    totalDays += calculateDays(
+                        person.startDate,
+                        person.endDate,
+                        globalStartDate,
+                        globalEndDate
+                    );
+                }
+
+                // Calculate share for each person
+                peopleData.forEach((person) => {
+                    const days = calculateDays(
+                        person.startDate,
+                        person.endDate,
+                        globalStartDate,
+                        globalEndDate
+                    );
+                    person.share = (days / totalDays) * totalAmount;
+                });
+
+                // Display results table
+                const resultsTable = document.createElement('table');
+                resultsTable.innerHTML = `
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Days</th>
+                            <th>Share</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${peopleData
+                            .map(
+                                (person) => `
+                                    <tr>
+                                        <td>${person.name}</td>
+                                        <td>${person.startDate.toISOString().split('T')[0]}</td>
+                                        <td>${person.endDate.toISOString().split('T')[0]}</td>
+                                        <td>${calculateDays(
+                                            person.startDate,
+                                            person.endDate,
+                                            globalStartDate,
+                                            globalEndDate
+                                        )}</td>
+                                        <td>$${person.share.toFixed(2)}</td>
+                                    </tr>
+                                `
+                            )
+                            .join('')}
+                    </tbody>
+                `;
+
+                displayResults(resultsTable.outerHTML);
+
+                }});
+
+    </script>
+</body>
+<footer>
+    <p>&copy; 2025 Anish Man Gurung. All rights reserved.</p>
+</footer>
+</html>
