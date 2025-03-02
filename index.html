@@ -117,7 +117,7 @@
                         error = 'End date must be after the start date.';
                         break;
                     }
-                    if (person.startDate <= globalStartDate || person.endDate >= globalEndDate) {
+                    if (person.startDate < globalStartDate || person.endDate > globalEndDate) {
                         error = 'Each person’s dates must fall within the global date range.';
                         break;
                     }
